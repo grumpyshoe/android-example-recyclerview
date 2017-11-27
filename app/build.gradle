@@ -7,7 +7,12 @@ android {
     compileSdkVersion compileSdk
 
     dataBinding {
-        enabled = true
+        enabled true
+        addDefaultAdapters true
+    }
+
+    kapt {
+        generateStubs = true
     }
 
     defaultConfig {
@@ -48,4 +53,5 @@ dependencies {
     androidTestImplementation libs.runner
     androidTestImplementation libs.espresso_core
     //    implementation "android.arch.lifecycle:extensions:1.0.0"
+    implementation 'com.android.support:cardview-v7:27.0.1'
 }

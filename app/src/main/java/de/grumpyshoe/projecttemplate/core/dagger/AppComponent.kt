@@ -3,7 +3,7 @@ package de.grumpyshoe.projecttemplate.core.dagger
 import dagger.Component
 import de.grumpyshoe.projecttemplate.core.repository.RepositoryManager
 import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.SQliteService
-import de.grumpyshoe.projecttemplate.core.repository.src.network.impl.retrofit.GithubService
+import de.grumpyshoe.projecttemplate.core.repository.src.network.impl.retrofit.RemoteService
 import de.grumpyshoe.projecttemplate.features.main.viewmodel.MainViewModel
 import javax.inject.Singleton
 
@@ -14,8 +14,8 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(AndroidModule::class, RepositoryModule::class))
 interface AppComponent {
 
-    // base
-    fun inject(view: GithubService)
+    // core
+    fun inject(view: RemoteService)
     fun inject(view: SQliteService)
     fun inject(view: RepositoryManager)
 

@@ -6,7 +6,7 @@ import de.grumpyshoe.projecttemplate.core.repository.RepositoryManager
 import de.grumpyshoe.projecttemplate.core.repository.src.database.DatabaseManager
 import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.SQliteService
 import de.grumpyshoe.projecttemplate.core.repository.src.network.NetworkManager
-import de.grumpyshoe.projecttemplate.core.repository.src.network.impl.retrofit.GithubService
+import de.grumpyshoe.projecttemplate.core.repository.src.network.impl.retrofit.RemoteService
 import javax.inject.Singleton
 
 /**
@@ -46,6 +46,6 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideNetworkManager() : NetworkManager {
-        return GithubService()
+        return RemoteService()
     }
 }

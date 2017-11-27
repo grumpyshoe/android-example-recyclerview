@@ -2,26 +2,24 @@ package de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.r
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.room.entities.ContributorEntity
+import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.room.entities.PostEntity
 
 /**
- * Created by grumpyshoe on 14.11.17.
- *
- * Dao interface for interacting on Room Data object for 'Contributor'
+ * Created by grumpyshoe on 23.11.17.
  */
 @Dao
-interface ContributorDao {
+interface PostDao {
 
-    @Query("select * from contributors")
-    fun getAllContributors(): List<ContributorEntity>
+    @Query("select * from posts")
+    fun getAllPosts(): List<PostEntity>
 
 //    @Query("select * from repositories where id = :id")
 //    fun findContributorById(id: Long): ContributorEntity
 
-    @Insert(onConflict = REPLACE)
-    fun insertContributor(contributor: ContributorEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPost(postEntity: PostEntity)
 
 //    @Update(onConflict = REPLACE)
 //    fun updateContributor(contributor: ContributorEntity)
@@ -29,7 +27,7 @@ interface ContributorDao {
 //    @Delete
 //    fun deleteTContributor(contributor: ContributorEntity)
 
-    @Query("delete from contributors ")
+    @Query("delete from posts ")
     fun deleteAll()
 
 }

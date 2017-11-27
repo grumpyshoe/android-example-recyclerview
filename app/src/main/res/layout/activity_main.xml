@@ -8,25 +8,123 @@
         <variable
             name="viewmodel"
             type="de.grumpyshoe.projecttemplate.features.main.viewmodel.MainViewModel"/>
+
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onRefreshListener="@{viewmodel.onRefreshListener}"
         android:background="#000"
+        android:onRefreshListener="@{viewmodel.onRefreshListener}"
         android:setRefreshing="@{viewmodel.isLoading()}">
 
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <RadioGroup
+                android:id="@+id/radio_grp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:OnCheckedChangeListener="@{viewmodel.radioGrpChangeListener}">
+
+                <RadioButton
+                    android:id="@+id/from_top"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="top"
+                    android:textColor="#fff"/>
+
+                <RadioButton
+                    android:id="@+id/from_right"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="right"
+                    android:textColor="#fff"/>
+
+                <RadioButton
+                    android:id="@+id/from_left"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="left"
+                    android:textColor="#fff"/>
+
+                <RadioButton
+                    android:id="@+id/from_bottom"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="bottom"
+                    android:textColor="#fff"/>
+
+            </RadioGroup>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="418dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                android:adapterUpdated="@{viewmodel.updateDataFinished}"
+                android:gravity="center"
+                android:layoutAnimation="@anim/layout_animation_from_top"
+                android:layoutAnimationController="@{viewmodel.layoutAnimationController}"
+                android:padding="8dp"
+                android:textColor="#eee"
+                android:visibility="@{!viewmodel.isLoading}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="@{viewmodel.contributors}"
-                android:visibility="@{!viewmodel.isLoading}"
-                android:textColor="#eee"
-                tools:text="layout design dummy text"/>
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:text="no data available"
+                android:textColor="#994"
+                android:textSize="28sp"
+                android:visibility="@{viewmodel.noData}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="no data"/>
+
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity=""
+                android:text="error"
+                android:textColor="#f00"
+                android:textSize="28sp"
+                android:visibility="@{viewmodel.error}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@{viewmodel.errorText}"/>
+
+
+        </android.support.constraint.ConstraintLayout>
+
 
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

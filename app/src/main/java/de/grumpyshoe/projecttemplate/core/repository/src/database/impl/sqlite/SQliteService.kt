@@ -3,10 +3,10 @@ package de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite
 import android.arch.persistence.room.Room
 import android.content.Context
 import de.grumpyshoe.projecttemplate.core.dagger.Injector
-import de.grumpyshoe.projecttemplate.core.repository.model.Contributor
+import de.grumpyshoe.projecttemplate.core.repository.model.Post
 import de.grumpyshoe.projecttemplate.core.repository.src.database.DatabaseManager
 import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.room.Database
-import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.room.entities.ContributorEntity
+import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.room.entities.PostEntity
 import javax.inject.Inject
 
 /**
@@ -16,9 +16,9 @@ import javax.inject.Inject
  */
 class SQliteService : DatabaseManager {
 
-    private val database : Database
+    private val database: Database
 
-    @Inject lateinit var context : Context
+    @Inject lateinit var context: Context
 
     init {
 
@@ -31,28 +31,28 @@ class SQliteService : DatabaseManager {
     }
 
     /**
-     * get all contributors
+     * get all posts
      *
      */
-    override  fun getAllContributor() : List<ContributorEntity> {
-        return database.contributorDao().getAllContributors()
+    override fun getAllPosts(): List<PostEntity> {
+        return  database.postDao().getAllPosts()
+    }
+
+    /**
+     * remove all posts
+     *
+     */
+    override fun removePosts() {
+        database.postDao().deleteAll()
     }
 
 
     /**
-     * insert new contributor
+     * insert new post
      *
      */
-    override  fun insertContributor(contributor: Contributor) {
-        return database.contributorDao().insertContributor(ContributorEntity.fromContributor(contributor))
-    }
-
-    /**
-     * remove all stored contributors
-     *
-     */
-    override fun removeContributors() {
-        database.contributorDao().deleteAll()
+    override fun insertPost(post: Post) {
+        return database.postDao().insertPost(PostEntity.fromPost(post))
     }
 
 }

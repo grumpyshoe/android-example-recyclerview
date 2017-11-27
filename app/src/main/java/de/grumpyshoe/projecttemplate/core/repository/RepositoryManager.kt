@@ -1,10 +1,10 @@
 package de.grumpyshoe.projecttemplate.core.repository
 
 import de.grumpyshoe.projecttemplate.core.dagger.Injector
-import de.grumpyshoe.projecttemplate.core.repository.model.Contributor
+import de.grumpyshoe.projecttemplate.core.repository.model.Post
 import de.grumpyshoe.projecttemplate.core.repository.src.database.DatabaseManager
 import de.grumpyshoe.projecttemplate.core.repository.src.network.NetworkManager
-import de.grumpyshoe.projecttemplate.core.repository.src.network.dto.ContributorDto
+import de.grumpyshoe.projecttemplate.core.repository.src.network.dto.PostDto
 import okhttp3.ResponseBody
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -22,120 +22,83 @@ class RepositoryManager {
     @Inject protected lateinit var databaseManager: DatabaseManager
     @Inject protected lateinit var networkManager: NetworkManager
 
-    val owner = "grumpyshoe"
-    val repo = "android-project-template"
 
+    /**
+     * inject dependencies
+     *
+     */
     init {
         Injector.INSTANCE.get().inject(this)
     }
 
 
-    fun geContributors(callback: RepoCallback<List<Contributor>>) {
+    /**
+     * get all posts
+     *
+     *  - check if db data should be deleted (forceDbRefresh = true)
+     *    - request data from webservice
+     *      - on success
+     *        - remove old database data...
+     *        - ...trigger ui callback with new data...
+     *        - ...and insert data to database
+     *      - on error
+     *        - trigger ui callback with error
+     *
+     *  - return data from db (forceDbRefresh = false)
+     *
+     */
+    fun getPosts(forceDbRefresh: Boolean, callback: RepoCallback<List<Post>>): Unit {
 
         doAsync {
 
-            // 1. try to find data in database
-            var result: List<Contributor> = databaseManager.getAllContributor()
-                    .map { it.toContributor() }
+            // if db content should be deleted ...
+            if (forceDbRefresh) {
 
-            // 2. check if value is available
-            if (result.isNotEmpty()) {
-
-                // if yes, return data
-                uiThread {
-
-                    // 2.1. return result
-                    callback.onResult(result)
-
-                }
+                postFromRemote(callback)
 
             } else {
+                val result = databaseManager.getAllPosts()
+                        .map { it.toPost() }
 
-                // 2.2. if not, try to request data from api
-                networkManager.getRepoContributors(owner, repo, object : RepoCallback<List<ContributorDto>> {
-
-                    override fun onResult(result: List<ContributorDto>) {
-
-                        doAsync {
-                            // 4. save result in database (add repo 'retrofit' before)
-                            result.forEach {
-
-                                it.repo = repo
-
-                            }
-
-                            // 3. return result
-                            uiThread {
-                                callback.onResult(result.map { it.toContributor() })
-                            }
-                        }
-
-
-                        doAsync {
-                            // 4. save result in database (add repo 'retrofit' before)
-                            result.forEach {
-
-                                databaseManager.insertContributor(it.toContributor())
-                            }
-
-                        }
-
-                    }
-
-                    override fun onError(throwable: Throwable?, code: Int, errorBody: ResponseBody?) {
-                        uiThread {
-                            callback.onError(throwable, code, errorBody)
-                        }
-                    }
-
-                })
-
+                if(result.isNotEmpty()){
+                    callback.onResult(result)
+                }
+                else {
+                    postFromRemote(callback)
+                }
             }
-
         }
-
     }
 
 
     /**
-     * refresh database if network request is successfull
+     * get posts from remote
      *
      */
-    fun refreshContributors(callback: RepoCallback<List<Contributor>>) {
+    private fun postFromRemote(callback: RepoCallback<List<Post>>) {
 
         doAsync {
 
-            // 1. get entries from network
-            networkManager.getRepoContributors(owner, repo, object : RepoCallback<List<ContributorDto>> {
+            // ... request data again
+            networkManager.getPosts(object : RepoCallback<List<PostDto>> {
 
-                override fun onResult(result: List<ContributorDto>) {
+                override fun onResult(result: List<PostDto>) {
 
                     doAsync {
 
-                        // 2. remove database entries
-                        databaseManager.removeContributors()
+                        // remove old data
+                        databaseManager.removePosts()
 
-                        // 3. save result in database (add repo 'retrofit' before)
-                        result.forEach {
-
-                            it.repo = repo
-
-                        }
-
-                        // 4. return result
+                        // 3. return result
                         uiThread {
-                            callback.onResult(result.map { it.toContributor() })
+                            callback.onResult(result.map { it.toPost() })
                         }
-                    }
 
-
-                    doAsync {
-                        // 4. save result in database (add repo 'retrofit' before)
+                        // insert data to db
                         result.forEach {
 
-                            databaseManager.insertContributor(it.toContributor())
+                            databaseManager.insertPost(it.toPost())
                         }
-
                     }
 
                 }
@@ -148,6 +111,7 @@ class RepositoryManager {
 
             })
         }
+
     }
 
 }

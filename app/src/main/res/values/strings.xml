@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">ProjectTemplate</string>
+    <string name="app_name">Example - RecyclerView</string>
+    <string-array name="direction">
+        <item>from top</item>
+        <item>from right</item>
+        <item>from left</item>
+        <item>from bottom</item>
+    </string-array>
 </resources>

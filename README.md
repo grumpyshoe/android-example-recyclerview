@@ -1,14 +1,12 @@
-# Template Project
+# Example Project - RecyclerView
 
-This is the very base kotlin project template that I use for upcoming projects.
-It includes some interesting architecture- and implementation presets that can be used or customized for your needs.
+This project is just a summary of how to implement a RecyclerView, based on my template project also available [on GitHub](https://github.com/grumpyshoe/android-project-template) 
 
-To show how a default setup may look I implemented a simple network request that returns the constributor of this template from github on first app opening. The response is stored in a local database by using 'Room' and after that has been done, the result is delivered by the database and no network call is requested anymore.
-(Hint: There is no database update implemented for now)
-
-For now, no tests are included, but i will add some default dummy unit- and android tests to show how it could be done.
-
-As you can see, it's just a small example but I tried to implement all that things I dont't want to write again every time when i start a new Project ;)
+For now it only includes:
+1. retrieving data from the open REST Api [jsonplaceholder](https://jsonplaceholder.typicode.com/).
+2. storing data in local SQlite-DB by using room
+3. show data on ui in recyclerview
+4. change recyclerview aninmation for showing data
 
 Feel free to contact me if something is incomprehensible or you have suggestions for improvement.
 

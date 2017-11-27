@@ -1,7 +1,7 @@
 package de.grumpyshoe.projecttemplate.core.repository.src.database
 
-import de.grumpyshoe.projecttemplate.core.repository.model.Contributor
-import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.room.entities.ContributorEntity
+import de.grumpyshoe.projecttemplate.core.repository.model.Post
+import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.room.entities.PostEntity
 
 /**
  * Created by grumpyshoe on 13.11.17.
@@ -11,22 +11,22 @@ import de.grumpyshoe.projecttemplate.core.repository.src.database.impl.sqlite.ro
 interface DatabaseManager {
 
     /**
-     * get all contributors
+     * get all posts
      *
      */
-    fun getAllContributor() : List<ContributorEntity>
+    fun getAllPosts() : List<PostEntity>
 
 
     /**
      * insert new contributor
      *
      */
-    fun insertContributor(contributor: Contributor)
+    fun insertPost(post: Post)
 
 
     /**
-     * insert new contributor
+     * remove all posts
      *
      */
-    fun removeContributors()
+    fun removePosts()
 }

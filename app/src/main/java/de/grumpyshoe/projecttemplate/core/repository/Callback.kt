@@ -9,7 +9,7 @@ import okhttp3.ResponseBody
  */
 interface Callback<T> {
 
-    fun onResult(result : T)
+    fun onResult(result: T)
     fun onError(throwable: Throwable? = null, code: Int = -1, errorBody: ResponseBody? = null)
 
 }
