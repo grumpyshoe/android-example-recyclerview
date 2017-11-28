@@ -79,6 +79,7 @@
                 android:padding="8dp"
                 android:textColor="#eee"
                 android:visibility="@{!viewmodel.isLoading}"
+                android:itemClickListener="@{viewmodel.itemClickListener}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"

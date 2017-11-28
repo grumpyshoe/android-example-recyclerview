@@ -5,6 +5,7 @@ import android.databinding.BaseObservable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.support.v4.widget.SwipeRefreshLayout
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.RadioGroup
@@ -13,7 +14,9 @@ import de.grumpyshoe.projecttemplate.core.dagger.Injector
 import de.grumpyshoe.projecttemplate.core.repository.Callback
 import de.grumpyshoe.projecttemplate.core.repository.RepositoryManager
 import de.grumpyshoe.projecttemplate.core.repository.model.Post
-import de.grumpyshoe.projecttemplate.features.main.adapter.RecyclerViewAdapter
+import de.grumpyshoe.projecttemplate.core.toast
+import de.grumpyshoe.projecttemplate.core.view.recyclerview.RecyclerViewClickListener
+import de.grumpyshoe.projecttemplate.core.view.recyclerview.adapter.RecyclerViewAdapter
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
@@ -22,7 +25,7 @@ import javax.inject.Inject
  *
  * MainViewModel contains all logic for interacting with or during the UI
  */
-class MainViewModel(val recyclerViewAdapter: RecyclerViewAdapter) : BaseObservable() {
+class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
 
     // public fields
     @Inject lateinit var repositoryManager: RepositoryManager
@@ -63,8 +66,8 @@ class MainViewModel(val recyclerViewAdapter: RecyclerViewAdapter) : BaseObservab
         updateDataFinished.set(false)
 
         // clear prvious data
-        recyclerViewAdapter.items?.clear()
-        recyclerViewAdapter.notifyDataSetChanged()
+        adapter.items?.clear()
+        adapter.notifyDataSetChanged()
 
         // load data and handle result
         repositoryManager.getPosts(forceDbClean, object : Callback<List<Post>> {
@@ -112,7 +115,7 @@ class MainViewModel(val recyclerViewAdapter: RecyclerViewAdapter) : BaseObservab
      *
      */
     internal fun onDataResult(result: List<Post>) {
-        recyclerViewAdapter.items = result.toMutableList()
+        adapter.items = result.toMutableList()
         isLoading.set(false)
         noData.set(false)
         updateDataFinished.set(true)
@@ -161,6 +164,18 @@ class MainViewModel(val recyclerViewAdapter: RecyclerViewAdapter) : BaseObservab
         // reload data
         loadPosts(false)
 
+    }
+
+
+    /**
+     * click listener for recyclerview items
+     *
+     */
+    val itemClickListener = object : RecyclerViewClickListener {
+        override fun recyclerViewListClicked(v: View, position: Int) {
+            val post = adapter.getItem (position) as Post
+            "position : $position:\ntitle:${post.title}".toast(context)
+        }
     }
 
 

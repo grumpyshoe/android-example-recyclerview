@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import de.grumpyshoe.projecttemplate.R
+import de.grumpyshoe.projecttemplate.core.view.recyclerview.adapter.RecyclerViewAdapter
 import de.grumpyshoe.projecttemplate.databinding.ActivityMainBinding
-import de.grumpyshoe.projecttemplate.features.main.adapter.RecyclerViewAdapter
 import de.grumpyshoe.projecttemplate.features.main.viewmodel.MainViewModel
 
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // create adapter
-        val adapter  = RecyclerViewAdapter()
+        val adapter  = RecyclerViewAdapter(R.layout.recyclerview_item)
 
         // create/init binding
         val binding = setContentView<ActivityMainBinding>(this, R.layout.activity_main)
