@@ -79,12 +79,23 @@ object CustomBindings {
 
 
     /**
-     * set LayoutAnimationController to RecyclerView
+     * set RecyclerViewClickListener to RecyclerView
      *
      */
     @JvmStatic
     @BindingAdapter("android:itemClickListener")
     fun setItemClickListener(view: RecyclerView, clickListener: RecyclerViewClickListener){
         (view.adapter as RecyclerViewAdapter).itemClickListener = clickListener
+    }
+
+
+    /**
+     * set RecyclerViewClickListener to RecyclerView
+     *
+     */
+    @JvmStatic
+    @BindingAdapter("android:layoutManager")
+    fun setLayoutManagerr(view: RecyclerView, manager: RecyclerView.LayoutManager) {
+        view.layoutManager = manager
     }
 }

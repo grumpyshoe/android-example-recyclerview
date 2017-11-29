@@ -25,9 +25,9 @@
             android:padding="8dp">
 
             <RadioGroup
-                android:id="@+id/radio_grp"
+                android:id="@+id/radio_grp_direction"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:OnCheckedChangeListener="@{viewmodel.radioGrpChangeListener}">
 
@@ -66,24 +66,75 @@
 
             </RadioGroup>
 
+            <View
+                android:id="@+id/divider_1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#222"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radio_grp_direction"/>
+
+            <RadioGroup
+                android:id="@+id/radio_grp_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:OnCheckedChangeListener="@{viewmodel.radioGrpChangeLayout}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_1">
+
+                <RadioButton
+                    android:id="@+id/layout_linear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="LinearLayout"
+                    android:textColor="#fff"/>
+
+                <RadioButton
+                    android:id="@+id/layout_grid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="GridLayout"
+                    android:textColor="#fff"/>
+
+
+            </RadioGroup>
+
+            <View
+                android:id="@+id/divider_2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#222"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radio_grp_layout"/>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="418dp"
-                android:layout_marginBottom="16dp"
+                android:layout_width="347dp"
+                android:layout_height="495dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:adapterUpdated="@{viewmodel.updateDataFinished}"
                 android:gravity="center"
+                android:itemClickListener="@{viewmodel.itemClickListener}"
                 android:layoutAnimation="@anim/layout_animation_from_top"
                 android:layoutAnimationController="@{viewmodel.layoutAnimationController}"
+                android:layoutManager="@{viewmodel.layoutManager}"
                 android:padding="8dp"
                 android:textColor="#eee"
                 android:visibility="@{!viewmodel.isLoading}"
-                android:itemClickListener="@{viewmodel.itemClickListener}"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_2"/>
 
             <TextView
                 android:id="@+id/textView"
@@ -100,7 +151,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radio_grp_layout"
                 tools:text="no data"/>
 
 
@@ -120,12 +171,12 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radio_grp_layout"
                 tools:text="@{viewmodel.errorText}"/>
 
 
         </android.support.constraint.ConstraintLayout>
 
-
     </android.support.v4.widget.SwipeRefreshLayout>
+
 </layout>

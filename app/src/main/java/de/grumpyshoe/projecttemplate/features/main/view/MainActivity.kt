@@ -3,7 +3,6 @@ package de.grumpyshoe.projecttemplate.features.main.view
 import android.databinding.DataBindingUtil.setContentView
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import de.grumpyshoe.projecttemplate.R
 import de.grumpyshoe.projecttemplate.core.view.recyclerview.adapter.RecyclerViewAdapter
 import de.grumpyshoe.projecttemplate.databinding.ActivityMainBinding
@@ -18,7 +17,6 @@ import de.grumpyshoe.projecttemplate.features.main.viewmodel.MainViewModel
  *
  */
 class MainActivity : AppCompatActivity() {
-
 
     /**
      * onCreate
@@ -40,6 +38,6 @@ class MainActivity : AppCompatActivity() {
 
         // init recyclerview
         binding.recyclerview.adapter = adapter
-        binding.recyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
+
 }

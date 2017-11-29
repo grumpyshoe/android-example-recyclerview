@@ -5,6 +5,8 @@ import android.databinding.BaseObservable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
@@ -24,6 +26,7 @@ import javax.inject.Inject
  * Created by grumpyshoe on 13.11.17.
  *
  * MainViewModel contains all logic for interacting with or during the UI
+ *
  */
 class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
 
@@ -35,9 +38,16 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
     val isLoading = ObservableBoolean(false)
     val updateDataFinished = ObservableBoolean(false)
     val layoutAnimationController = ObservableField<LayoutAnimationController>()
+    val layoutManager = ObservableField<LinearLayoutManager>()
 
     // private fields
     private var errorText: String = ""
+    private var layoutManagerLinear : LinearLayoutManager
+    private var layoutManageGrid : GridLayoutManager
+    private var animationTop : LayoutAnimationController
+    private var animationBottom : LayoutAnimationController
+    private var animationLeft : LayoutAnimationController
+    private var animationRight : LayoutAnimationController
 
 
     /**
@@ -47,7 +57,16 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
     init {
         Injector.INSTANCE.get().inject(this)
 
-        layoutAnimationController.set(AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_top))
+        layoutManagerLinear = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        layoutManageGrid = GridLayoutManager(context, 3)
+
+        animationTop = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_top)
+        animationBottom = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom)
+        animationLeft = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_left)
+        animationRight = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_right)
+
+        layoutAnimationController.set(animationTop)
+        layoutManager.set(layoutManagerLinear)
 
         loadPosts()
     }
@@ -66,7 +85,7 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
         updateDataFinished.set(false)
 
         // clear prvious data
-        adapter.items?.clear()
+        adapter.items.clear()
         adapter.notifyDataSetChanged()
 
         // load data and handle result
@@ -81,7 +100,7 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
             }
 
             override fun onError(throwable: Throwable?, code: Int, errorBody: ResponseBody?) {
-                onErrorResult(throwable, code, errorBody)
+                onErrorResult(code, errorBody)
             }
 
         })
@@ -126,7 +145,7 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
      * handle error
      *
      */
-    internal fun onErrorResult(throwable: Throwable?, code: Int, errorBody: ResponseBody?) {
+    internal fun onErrorResult(code: Int, errorBody: ResponseBody?) {
         errorText = "HTTP CODE : " + code.toString() + " - " + errorBody?.string()
         error.set(true)
         noData.set(false)
@@ -151,15 +170,13 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
     val radioGrpChangeListener = RadioGroup.OnCheckedChangeListener { group, checkedId ->
 
         // set layout animation according to selection
-        val anim: Int
         when (checkedId) {
-            R.id.from_top -> anim = R.anim.layout_animation_from_top
-            R.id.from_left -> anim = R.anim.layout_animation_from_left
-            R.id.from_bottom -> anim = R.anim.layout_animation_from_bottom
-            R.id.from_right -> anim = R.anim.layout_animation_from_right
-            else -> anim = R.anim.layout_animation_from_top
+            R.id.from_top -> layoutAnimationController.set(animationTop)
+            R.id.from_left ->layoutAnimationController.set(animationLeft)
+            R.id.from_bottom -> layoutAnimationController.set(animationBottom)
+            R.id.from_right -> layoutAnimationController.set(animationRight)
+            else -> layoutAnimationController.set(animationTop)
         }
-        layoutAnimationController.set(AnimationUtils.loadLayoutAnimation(context, anim))
 
         // reload data
         loadPosts(false)
@@ -176,6 +193,22 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
             val post = adapter.getItem (position) as Post
             "position : $position:\ntitle:${post.title}".toast(context)
         }
+    }
+
+
+    /**
+     * set layoutmanager for recyclerview
+     *
+     */
+    val radioGrpChangeLayout= RadioGroup.OnCheckedChangeListener { group, checkedId ->
+
+        // set layout animation according to selection
+        val anim: Int
+        when (checkedId) {
+            R.id.layout_linear -> layoutManager.set(layoutManagerLinear)
+            R.id.layout_grid ->layoutManager.set(layoutManageGrid)
+        }
+
     }
 
 
