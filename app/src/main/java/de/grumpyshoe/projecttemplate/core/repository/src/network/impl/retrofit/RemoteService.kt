@@ -1,10 +1,11 @@
 package de.grumpyshoe.projecttemplate.core.repository.src.network.impl.retrofit
 
+import android.accounts.NetworkErrorException
+import com.thepeaklab.onsitereportingapp.core.repository.src.network.error.NetworkRequestException
+import com.thepeaklab.onsitereportingapp.core.repository.src.network.error.NetworkResponseException
 import de.grumpyshoe.projecttemplate.core.repository.src.network.NetworkManager
 import de.grumpyshoe.projecttemplate.core.repository.src.network.dto.PostDto
 import de.grumpyshoe.projecttemplate.core.repository.src.network.impl.retrofit.api.JsonPlaceholderServiceApi
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -28,20 +29,23 @@ class RemoteService : NetworkManager {
      * get posts from
      *
      */
-    override fun getPosts(callback: RepoCallback<List<PostDto>>) {
-        jsonPlaceholderApi.getPosts().enqueue(object : Callback<List<PostDto>> {
+    override fun getPosts(): List<PostDto> {
 
-            override fun onResponse(call: Call<List<PostDto>>?, response: Response<List<PostDto>>?) {
-                checkResponse(response, callback)
+        try {
+
+            var liste = mutableListOf<PostDto>()
+
+            (0..20).forEach {
+                liste.add(PostDto(it, it, "ttitle_$it","body_$it"))
             }
+            return liste
 
+            val response = jsonPlaceholderApi.getPosts().execute()
+            return checkResponse<List<PostDto>>(response)
 
-            override fun onFailure(call: Call<List<PostDto>>?, t: Throwable?) {
-                callback.onError(t)
-            }
-
-
-        })
+        } catch (e: Exception) {
+            throw NetworkRequestException(e)
+        }
     }
 
 
@@ -49,15 +53,15 @@ class RemoteService : NetworkManager {
      * private method to check for a successfully response
      *
      */
-    private fun <C> checkResponse(response: Response<C>?, callback: RepoCallback<C>){
+    private fun <C> checkResponse(response: Response<C>?): C {
         if (response != null) {
-            if (response.isSuccessful && response.body() != null) {
-                callback.onResult(response.body())
+            if (response.isSuccessful() && response.body() != null) {
+                return response.body()
             } else {
-                callback.onError(code = response.code(), errorBody = response.errorBody())
+                throw NetworkResponseException(response.code(), response.errorBody())
             }
         } else {
-            callback.onError(code = 404)
+            throw NetworkErrorException()
         }
     }
 }

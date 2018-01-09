@@ -7,18 +7,18 @@ import android.databinding.ObservableField
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.RadioGroup
+import com.thepeaklab.onsitereportingapp.core.repository.src.network.error.ErrorType
 import de.grumpyshoe.projecttemplate.R
+import de.grumpyshoe.projecttemplate.common.recyclerview.RecyclerViewClickListener
 import de.grumpyshoe.projecttemplate.core.dagger.Injector
 import de.grumpyshoe.projecttemplate.core.repository.Callback
 import de.grumpyshoe.projecttemplate.core.repository.RepositoryManager
 import de.grumpyshoe.projecttemplate.core.repository.model.Post
 import de.grumpyshoe.projecttemplate.core.toast
-import de.grumpyshoe.projecttemplate.core.view.recyclerview.RecyclerViewClickListener
-import de.grumpyshoe.projecttemplate.core.view.recyclerview.adapter.RecyclerViewAdapter
+import de.grumpyshoe.projecttemplate.core.view.recyclerview2.RecyclerViewAdapter
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ import javax.inject.Inject
  * MainViewModel contains all logic for interacting with or during the UI
  *
  */
-class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
+class MainViewModel(val adapter: RecyclerViewAdapter<Post>) : BaseObservable() {
 
     // public fields
     @Inject lateinit var repositoryManager: RepositoryManager
@@ -85,8 +85,8 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
         updateDataFinished.set(false)
 
         // clear prvious data
-        adapter.items.clear()
-        adapter.notifyDataSetChanged()
+//        adapter.items.clear()
+//        adapter.notifyDataSetChanged()
 
         // load data and handle result
         repositoryManager.getPosts(forceDbClean, object : Callback<List<Post>> {
@@ -99,8 +99,9 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
                 }
             }
 
-            override fun onError(throwable: Throwable?, code: Int, errorBody: ResponseBody?) {
-                onErrorResult(code, errorBody)
+
+            override fun onError(errorType: ErrorType, throwable: Throwable) {
+                onErrorResult(0, null)
             }
 
         })
@@ -188,11 +189,14 @@ class MainViewModel(val adapter: RecyclerViewAdapter) : BaseObservable() {
      * click listener for recyclerview items
      *
      */
-    val itemClickListener = object : RecyclerViewClickListener {
-        override fun recyclerViewListClicked(v: View, position: Int) {
-            val post = adapter.getItem (position) as Post
-            "position : $position:\ntitle:${post.title}".toast(context)
+    val itemClickListener = object : RecyclerViewClickListener<Post> {
+        override fun recyclerViewListClicked(item: Post) {
+            "title:${item.title}".toast(context)
         }
+//        override fun recyclerViewListClicked(v: View, position: Int) {
+//            val post = adapter.getItem (position) as Post
+//            "position : $position:\ntitle:${post.title}".toast(context)
+//        }
     }
 
 

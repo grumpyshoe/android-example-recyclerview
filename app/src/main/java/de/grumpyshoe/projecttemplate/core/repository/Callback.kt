@@ -1,6 +1,6 @@
 package de.grumpyshoe.projecttemplate.core.repository
 
-import okhttp3.ResponseBody
+import com.thepeaklab.onsitereportingapp.core.repository.src.network.error.ErrorType
 
 /**
  * Created by grumpyshoe on 14.11.17.
@@ -10,6 +10,6 @@ import okhttp3.ResponseBody
 interface Callback<T> {
 
     fun onResult(result: T)
-    fun onError(throwable: Throwable? = null, code: Int = -1, errorBody: ResponseBody? = null)
+    fun onError(errorType: ErrorType = ErrorType.UNKOWN, throwable: Throwable)
 
 }

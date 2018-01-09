@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="item"
-            type="de.grumpyshoe.projecttemplate.core.repository.model.Post"/>
+            name="viewmodel"
+            type="de.grumpyshoe.projecttemplate.features.main.viewmodel.PostItemViewModel"/>
     </data>
 
 
@@ -33,7 +33,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:padding="8dp"
-                android:text="@{item.title}"
+                android:text="@{viewmodel.title}"
                 android:textColor="#eee"
                 android:textSize="18sp"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -50,7 +50,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:padding="8dp"
-                android:text="@{item.body}"
+                android:text="@{viewmodel.body}"
                 android:textColor="#ccc"
                 android:textSize="16sp"
                 app:layout_constraintHorizontal_bias="1.0"

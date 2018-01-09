@@ -5,8 +5,8 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.animation.LayoutAnimationController
-import de.grumpyshoe.projecttemplate.core.view.recyclerview.RecyclerViewClickListener
-import de.grumpyshoe.projecttemplate.core.view.recyclerview.adapter.RecyclerViewAdapter
+import de.grumpyshoe.projecttemplate.common.recyclerview.RecyclerViewClickListener
+import de.grumpyshoe.projecttemplate.core.view.recyclerview2.RecyclerViewAdapter
 
 /**
  * Created by grumpyshoe on 16.11.17.+
@@ -84,8 +84,8 @@ object CustomBindings {
      */
     @JvmStatic
     @BindingAdapter("android:itemClickListener")
-    fun setItemClickListener(view: RecyclerView, clickListener: RecyclerViewClickListener){
-        (view.adapter as RecyclerViewAdapter).itemClickListener = clickListener
+    fun <T>setItemClickListener(view: RecyclerView, clickListener: RecyclerViewClickListener<T>){
+        (view.adapter as RecyclerViewAdapter<*>).itemClickListener = clickListener
     }
 
 

@@ -4,10 +4,11 @@ import android.databinding.DataBindingUtil.setContentView
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import de.grumpyshoe.projecttemplate.R
-import de.grumpyshoe.projecttemplate.core.view.recyclerview.adapter.RecyclerViewAdapter
+import de.grumpyshoe.projecttemplate.core.repository.model.Post
+import de.grumpyshoe.projecttemplate.core.view.recyclerview2.RecyclerViewAdapter
 import de.grumpyshoe.projecttemplate.databinding.ActivityMainBinding
 import de.grumpyshoe.projecttemplate.features.main.viewmodel.MainViewModel
-
+import de.grumpyshoe.projecttemplate.features.main.viewmodel.PostItemViewModel
 
 
 /**
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // create adapter
-        val adapter  = RecyclerViewAdapter(R.layout.recyclerview_item)
+        val adapter  = RecyclerViewAdapter<Post>(R.layout.recyclerview_item, PostItemViewModel())
 
         // create/init binding
         val binding = setContentView<ActivityMainBinding>(this, R.layout.activity_main)

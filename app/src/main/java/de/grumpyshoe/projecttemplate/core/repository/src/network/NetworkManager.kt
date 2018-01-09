@@ -10,6 +10,6 @@ import de.grumpyshoe.projecttemplate.core.repository.Callback as RepoCallback
  */
 interface NetworkManager {
 
-    fun getPosts(callback: RepoCallback<List<PostDto>>)
+    fun getPosts(): List<PostDto>
 
 }

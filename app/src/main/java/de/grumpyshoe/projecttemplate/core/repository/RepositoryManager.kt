@@ -1,11 +1,10 @@
 package de.grumpyshoe.projecttemplate.core.repository
 
+import com.thepeaklab.onsitereportingapp.core.repository.src.network.error.ErrorUtils
 import de.grumpyshoe.projecttemplate.core.dagger.Injector
 import de.grumpyshoe.projecttemplate.core.repository.model.Post
 import de.grumpyshoe.projecttemplate.core.repository.src.database.DatabaseManager
 import de.grumpyshoe.projecttemplate.core.repository.src.network.NetworkManager
-import de.grumpyshoe.projecttemplate.core.repository.src.network.dto.PostDto
-import okhttp3.ResponseBody
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import javax.inject.Inject
@@ -60,10 +59,9 @@ class RepositoryManager {
                 val result = databaseManager.getAllPosts()
                         .map { it.toPost() }
 
-                if(result.isNotEmpty()){
+                if (result.isNotEmpty()) {
                     callback.onResult(result)
-                }
-                else {
+                } else {
                     postFromRemote(callback)
                 }
             }
@@ -79,37 +77,30 @@ class RepositoryManager {
 
         doAsync {
 
-            // ... request data again
-            networkManager.getPosts(object : RepoCallback<List<PostDto>> {
+            try {
 
-                override fun onResult(result: List<PostDto>) {
+                // ... request data again
+                val posts = networkManager.getPosts()
 
-                    doAsync {
+                // remove old data
+                databaseManager.removePosts()
 
-                        // remove old data
-                        databaseManager.removePosts()
-
-                        // 3. return result
-                        uiThread {
-                            callback.onResult(result.map { it.toPost() })
-                        }
-
-                        // insert data to db
-                        result.forEach {
-
-                            databaseManager.insertPost(it.toPost())
-                        }
-                    }
-
+                // 3. return result
+                uiThread {
+                    callback.onResult(posts.map { it.toPost() })
                 }
 
-                override fun onError(throwable: Throwable?, code: Int, errorBody: ResponseBody?) {
-                    uiThread {
-                        callback.onError(throwable, code, errorBody)
-                    }
-                }
+                // insert data to db
+                posts.forEach {
 
-            })
+                    databaseManager.insertPost(it.toPost())
+                }
+            } catch (e: Exception) {
+                uiThread {
+                    callback.onError(ErrorUtils.parse(e), e)
+                }
+            }
+
         }
 
     }
