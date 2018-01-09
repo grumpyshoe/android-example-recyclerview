@@ -18,6 +18,7 @@ class RecyclerViewAdapter<T>(val layoutResId: Int, val viewModel: ItemViewmodel<
 
     var items: List<T> = mutableListOf<T>()
     var itemClickListener: RecyclerViewClickListener? = null
+    private var selectedPos: Int = 0
 
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemViewHolder<T> {
@@ -29,7 +30,9 @@ class RecyclerViewAdapter<T>(val layoutResId: Int, val viewModel: ItemViewmodel<
 
     override fun onBindViewHolder(holder: ItemViewHolder<T>, position: Int) {
         if (items.isNotEmpty()) {
+            val isSelected = position == selectedPos
             holder.setItem(items[position])
+            holder.isSelected = isSelected
         }
     }
 

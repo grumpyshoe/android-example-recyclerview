@@ -13,15 +13,19 @@ import de.grumpyshoe.projecttemplate.common.recyclerview.RecyclerViewClickListen
  */
 class ItemViewHolder<T>(val viewModel: ItemViewmodel<T>, itemView: View, val itemClickListener: RecyclerViewClickListener?) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-    var item: T? = null
+    var isSelected: Boolean = false
 
     init {
         itemView.setOnClickListener(this)
     }
 
     internal fun setItem(item: T) {
-        this.item = item
         viewModel.setItem(item)
+    }
+
+
+    internal fun setSelected(selected : Boolean) {
+        viewModel.setSelected(selected)
     }
 
     override fun onClick(view: View?) {

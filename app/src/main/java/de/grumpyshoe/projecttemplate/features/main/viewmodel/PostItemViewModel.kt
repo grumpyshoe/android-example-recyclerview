@@ -15,6 +15,11 @@ class PostItemViewModel : ItemViewmodel<Post>() {
         notifyChange()
     }
 
+    override fun setSelected(selected: Boolean) {
+        setSelected(selected)
+        notifyChange()
+    }
+
     fun getTitle(): String {
         return if(item == null) {
             ""
