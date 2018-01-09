@@ -189,14 +189,11 @@ class MainViewModel(val adapter: RecyclerViewAdapter<Post>) : BaseObservable() {
      * click listener for recyclerview items
      *
      */
-    val itemClickListener = object : RecyclerViewClickListener<Post> {
-        override fun recyclerViewListClicked(item: Post) {
-            "title:${item.title}".toast(context)
+    val itemClickListener = object : RecyclerViewClickListener {
+        override fun recyclerViewListClicked(position: Int) {
+            val post = adapter.getItem (position) as Post
+            "position : $position:\ntitle:${post.title}".toast(context)
         }
-//        override fun recyclerViewListClicked(v: View, position: Int) {
-//            val post = adapter.getItem (position) as Post
-//            "position : $position:\ntitle:${post.title}".toast(context)
-//        }
     }
 
 

@@ -84,7 +84,7 @@ object CustomBindings {
      */
     @JvmStatic
     @BindingAdapter("android:itemClickListener")
-    fun <T>setItemClickListener(view: RecyclerView, clickListener: RecyclerViewClickListener<T>){
+    fun setItemClickListener(view: RecyclerView, clickListener: RecyclerViewClickListener){
         (view.adapter as RecyclerViewAdapter<*>).itemClickListener = clickListener
     }
 

@@ -7,6 +7,5 @@ import android.databinding.BaseObservable
  */
 abstract class  ItemViewmodel<T> : BaseObservable() {
 
-
     abstract fun setItem(newItem: T)
 }
