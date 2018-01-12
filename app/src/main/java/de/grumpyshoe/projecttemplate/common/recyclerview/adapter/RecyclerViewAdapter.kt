@@ -21,6 +21,10 @@ class RecyclerViewAdapter<T>(val layoutResId: Int, val viewModel: ItemViewmodel<
     private var selectedPos: Int = 0
 
 
+    /**
+     * on create viewholder
+     *
+     */
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemViewHolder<T> {
         val binding = DataBindingUtil.inflate<RecyclerviewItemBinding>(LayoutInflater.from(parent?.context), layoutResId, parent, false)
         val vm = viewModel::javaClass.get().newInstance()
@@ -28,6 +32,11 @@ class RecyclerViewAdapter<T>(val layoutResId: Int, val viewModel: ItemViewmodel<
         return ItemViewHolder<T>(vm as ItemViewmodel<T>, binding.root, itemClickListener)
     }
 
+
+    /**
+     * bind data
+     *
+     */
     override fun onBindViewHolder(holder: ItemViewHolder<T>, position: Int) {
         if (items.isNotEmpty()) {
             val isSelected = position == selectedPos
@@ -36,6 +45,11 @@ class RecyclerViewAdapter<T>(val layoutResId: Int, val viewModel: ItemViewmodel<
         }
     }
 
+
+    /**
+     * get item count
+     *
+     */
     override fun getItemCount(): Int {
         return items.size
     }

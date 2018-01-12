@@ -33,13 +33,6 @@ class RemoteService : NetworkManager {
 
         try {
 
-            var liste = mutableListOf<PostDto>()
-
-            (0..20).forEach {
-                liste.add(PostDto(it, it, "ttitle_$it","body_$it"))
-            }
-            return liste
-
             val response = jsonPlaceholderApi.getPosts().execute()
             return checkResponse<List<PostDto>>(response)
 
